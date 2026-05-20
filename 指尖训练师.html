@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>指尖训练师 - PC游戏手指熟练度训练</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #1a1a2e;
+      --bg-secondary: #16213e;
+      --bg-card: #0f3460;
+      --accent-green: #00ff88;
+      --accent-red: #ff4757;
+      --accent-blue: #3742fa;
+      --accent-yellow: #ffa502;
+      --accent-purple: #9b59b6;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --glow-green: 0 0 20px rgba(0, 255, 136, 0.5);
+      --glow-red: 0 0 20px rgba(255, 71, 87, 0.5);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      min-height: 100vh;
+      color: var(--text-primary);
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .title {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, var(--accent-green), var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+    }
+
+    .version {
+      font-size: 0.9rem;
+      color: var(--accent-yellow);
+      background: rgba(255, 165, 2, 0.2);
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-left: 10px;
+      -webkit-text-fill-color: var(--accent-yellow);
+    }
+
+    .home-footer {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .share-btn {
+      padding: 12px 30px;
+      font-size: 1rem;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .share-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(55, 66, 250, 0.4);
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .mode-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .mode-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-green);
+      box-shadow: var(--glow-green);
+    }
+
+    .mode-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    .mode-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--accent-green);
+    }
+
+    .mode-card p {
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .mode-stats {
+      background: rgba(0, 255, 136, 0.1);
+      padding: 10px 15px;
+      border-radius: 8px;
+      color: var(--accent-green);
+    }
+
+    .stats-overview {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--accent-green);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .clear-btn {
+      display: block;
+      margin: 0 auto;
+      background: transparent;
+      border: 1px solid var(--accent-red);
+      color: var(--accent-red);
+      padding: 12px 30px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: var(--accent-red);
+      color: white;
+    }
+
+    .training-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .back-btn {
+      background: var(--bg-card);
+      border: none;
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: var(--accent-blue);
+    }
+
+    .training-title {
+      font-size: 2rem;
+      color: var(--accent-green);
+    }
+
+    .training-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+
+    .timer-display {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .reaction-time-display {
+      display: none;
+      padding: 10px 20px;
+      background: rgba(15, 52, 96, 0.8);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .reaction-time-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .reaction-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .reaction-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-family: 'Courier New', monospace;
+    }
+
+    .reaction-excellent {
+      color: #00ff88;
+    }
+
+    .reaction-good {
+      color: #3742fa;
+    }
+
+    .reaction-average {
+      color: #ffa502;
+    }
+
+    .reaction-slow {
+      color: #ff4757;
+    }
+
+    .timer-label {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+    }
+
+    .timer-value {
+      font-size: 4rem;
+      font-weight: bold;
+      color: var(--accent-green);
+      font-family: 'Courier New', monospace;
+    }
+
+    .timer-value.warning {
+      color: #ffa502;
+    }
+
+    .timer-value.danger {
+      color: var(--accent-red);
+    }
+
+    .timer-unit {
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+    }
+
+    .target-key {
+      width: 200px;
+      height: 200px;
+      background: var(--bg-card);
+      border: 4px solid var(--accent-green);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+      font-weight: bold;
+      color: var(--accent-green);
+      box-shadow: var(--glow-green);
+      transition: all 0.1s ease;
+    }
+
+    .target-key.pressed {
+      transform: scale(0.95);
+      background: var(--accent-green);
+      color: var(--bg-primary);
+    }
+
+    .target-key.wrong {
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+      box-shadow: var(--glow-red);
+    }
+
+    .sequence-display {
+      display: flex;
+      gap: 15px;
+    }
+
+    .sequence-key {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-card);
+      border: 2px solid var(--accent-blue);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .sequence-key.active {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+      box-shadow: var(--glow-green);
+    }
+
+    .sequence-key.done {
+      background: var(--accent-green);
+      color: var(--bg-primary);
+    }
+
+    .balloon-arena {
+      width: 100%;
+      max-width: 800px;
+      height: 350px;
+      background: linear-gradient(180deg, rgba(15, 52, 96, 0.3) 0%, rgba(15, 52, 96, 0.6) 100%);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .balloon-line {
+      position: absolute;
+      bottom: 50px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-red), var(--accent-yellow), var(--accent-red));
+      box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+    }
+
+    .balloon {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: top 0.05s linear;
+    }
+
+    @keyframes balloon-pop {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.3);
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes balloon-miss {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.5) translateY(50px);
+        opacity: 0;
+      }
+    }
+
+    .balloon-body {
+      width: 80px;
+      height: 100px;
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      box-shadow: inset -10px -10px 30px rgba(0, 0, 0, 0.2), 
+                  inset 10px 10px 30px rgba(255, 255, 255, 0.3),
+                  0 10px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .balloon-body::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 12px;
+      height: 12px;
+      background: currentColor;
+      clip-path: polygon(50% 100%, 0 0, 100% 0);
+    }
+
+    .balloon-string {
+      width: 2px;
+      height: 40px;
+      background: linear-gradient(180deg, #888 0%, #444 100%);
+    }
+
+    .balloon-key {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .balloon-pop {
+      animation: balloon-pop 0.3s ease-out forwards;
+    }
+
+    .balloon-miss {
+      animation: balloon-miss 0.5s ease-out forwards;
+    }
+
+    .balloon-warning {
+      animation: shake 0.3s ease-in-out infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .balloon-red { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%); color: #c0392b; }
+    .balloon-blue { background: linear-gradient(135deg, #5dade2 0%, #3498db 100%); color: #2471a3; }
+    .balloon-green { background: linear-gradient(135deg, #58d68d 0%, #2ecc71 100%); color: #1e8449; }
+    .balloon-yellow { background: linear-gradient(135deg, #f7dc6f 0%, #f1c40f 100%); color: #b7950b; }
+    .balloon-purple { background: linear-gradient(135deg, #bb8fce 0%, #9b59b6 100%); color: #7d3c98; }
+    .balloon-orange { background: linear-gradient(135deg, #f0b27a 0%, #e67e22 100%); color: #b8560b; }
+
+    .keyboard-visual {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .keyboard-instruction {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 10px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 165, 2, 0.3);
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .keyboard-row.mouse-row {
+      margin-top: 10px;
+    }
+
+    .key-spacer {
+      width: 58px;
+    }
+
+    .key {
+      width: 60px;
+      height: 60px;
+      background: var(--bg-card);
+      border: 2px solid var(--text-secondary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--text-primary);
+      transition: all 0.1s ease;
+    }
+
+    .key.pressed {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      color: var(--bg-primary);
+      transform: scale(0.95);
+    }
+
+    .key.target {
+      border-color: var(--accent-green);
+      box-shadow: var(--glow-green);
+    }
+
+    .mouse-key {
+      background: linear-gradient(135deg, var(--bg-card) 0%, #1a5276 100%);
+      border-color: var(--accent-blue);
+      width: 100px;
+    }
+
+    .score-board {
+      display: flex;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .score-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .score-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .score-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--accent-green);
+    }
+
+    .score-value.combo {
+      color: #ffa502;
+    }
+
+    .result-content {
+      background: var(--bg-card);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .result-title {
+      font-size: 2.5rem;
+      color: var(--accent-green);
+      margin-bottom: 20px;
+    }
+
+    .result-score {
+      margin-bottom: 30px;
+    }
+
+    .result-label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .result-value {
+      font-size: 5rem;
+      font-weight: bold;
+      color: var(--accent-green);
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .result-stat {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .result-stat-label {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 5px;
+    }
+
+    .result-stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .result-badge {
+      font-size: 3rem;
+      margin-bottom: 30px;
+    }
+
+    .result-btn {
+      background: var(--accent-green);
+      color: var(--bg-primary);
+      border: none;
+      padding: 15px 40px;
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .result-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow-green);
+    }
+
+    .result-btn.secondary {
+      background: transparent;
+      border: 2px solid var(--text-secondary);
+      color: var(--text-primary);
+    }
+
+    .result-btn.secondary:hover {
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    @media (max-width: 768px) {
+      .title {
+        font-size: 2rem;
+      }
+      
+      .modes-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .target-key {
+        width: 150px;
+        height: 150px;
+        font-size: 4rem;
+      }
+      
+      .score-board {
+        gap: 20px;
+      }
+      
+      .score-value {
+        font-size: 1.5rem;
+      }
+      
+      .key {
+        width: 45px;
+        height: 45px;
+        font-size: 0.7rem;
+      }
+      
+      .balloon-arena {
+        height: 280px;
+      }
+      
+      .balloon-body {
+        width: 60px;
+        height: 75px;
+        font-size: 1.3rem;
+      }
+      
+      .result-stats {
+        grid-template-columns: 1fr;
+      }
+      
+      .mouse-key {
+        width: 70px;
+        font-size: 0.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">指尖训练师 <span class="version" id="app-version"></span></h1>
+      <p class="subtitle">提升你的游戏操作熟练度</p>
+    </header>
+
+    <div id="home-page" class="page active">
+      <div class="modes-grid">
+        <div class="mode-card" data-mode="random">
+          <div class="mode-icon">🎯</div>
+          <h3>随机按键</h3>
+          <p>随机显示按键，快速按下对应键位，提升反应速度</p>
+          <div class="mode-stats">
+            <span>最佳: <strong id="random-best">0</strong> 分</span>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="sequence">
+          <div class="mode-icon">🔢</div>
+          <h3>序列按键</h3>
+          <p>按顺序完成按键序列，锻炼肌肉记忆</p>
+          <div class="mode-stats">
+            <span>最佳: <strong id="sequence-best">0</strong> 分</span>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="reaction">
+          <div class="mode-icon">⚡</div>
+          <h3>反应训练</h3>
+          <p>快速反应测试，挑战你的极限反应速度</p>
+          <div class="mode-stats">
+            <span>最佳: <strong id="reaction-best">0</strong> 分</span>
+          </div>
+        </div>
+
+        <div class="mode-card" data-mode="balloon">
+          <div class="mode-icon">🎈</div>
+          <h3>气球大战</h3>
+          <p>气球从上方飘落，在消失前按下对应按键击破它们</p>
+          <div class="mode-stats">
+            <span>最佳: <strong id="balloon-best">0</strong> 分</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-overview">
+        <div class="stat-card">
+          <div class="stat-icon">🏆</div>
+          <div class="stat-content">
+            <div class="stat-value" id="total-games">0</div>
+            <div class="stat-label">总训练次数</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🎯</div>
+          <div class="stat-content">
+            <div class="stat-value" id="avg-accuracy">0%</div>
+            <div class="stat-label">平均准确率</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🔥</div>
+          <div class="stat-content">
+            <div class="stat-value" id="max-combo">0</div>
+            <div class="stat-label">最高连击</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="home-footer">
+        <button class="share-btn" id="share-btn">📤 分享给朋友</button>
+        <button class="clear-btn" id="clear-data">清除所有数据</button>
+      </div>
+    </div>
+
+    <div id="training-page" class="page">
+      <div class="training-header">
+        <button class="back-btn" id="back-btn">← 返回</button>
+        <h2 class="training-title" id="training-title">训练模式</h2>
+      </div>
+
+      <div class="training-content" id="training-content">
+        <div class="timer-display">
+          <span class="timer-label">剩余时间</span>
+          <span class="timer-value" id="timer">60</span>
+          <span class="timer-unit">秒</span>
+        </div>
+
+        <div class="reaction-time-display" id="reaction-time-display"></div>
+
+        <div class="target-key" id="target-key">?</div>
+
+        <div class="sequence-display" id="sequence-display"></div>
+
+        <div class="balloon-arena" id="balloon-arena">
+          <div class="balloon-line" id="balloon-line"></div>
+        </div>
+
+        <div class="keyboard-visual">
+          <div class="keyboard-instruction">
+            💡 使用说明：组合键（Shift + W/A/S/D）或鼠标侧键
+          </div>
+          <div class="keyboard-row basic-keys">
+            <div class="key" data-key="q">Q</div>
+            <div class="key" data-key="w">W</div>
+            <div class="key" data-key="e">E</div>
+            <div class="key" data-key="r">R</div>
+            <div class="key" data-key="t">T</div>
+          </div>
+          <div class="keyboard-row basic-keys">
+            <div class="key" data-key="a">A</div>
+            <div class="key" data-key="s">S</div>
+            <div class="key" data-key="d">D</div>
+            <div class="key" data-key="f">F</div>
+            <div class="key" data-key="2">2</div>
+          </div>
+          <div class="keyboard-row combo-keys">
+            <div class="key" data-key="shift+w">⇧W</div>
+            <div class="key" data-key="shift+a">⇧A</div>
+            <div class="key" data-key="shift+s">⇧S</div>
+            <div class="key" data-key="shift+d">⇧D</div>
+          </div>
+          <div class="keyboard-row mouse-row">
+            <div class="key mouse-key" data-key="mouse4">侧键1</div>
+          </div>
+        </div>
+
+        <div class="score-board">
+          <div class="score-item">
+            <span class="score-label">得分</span>
+            <span class="score-value" id="score">0</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">连击</span>
+            <span class="score-value combo" id="combo">0</span>
+          </div>
+          <div class="score-item">
+            <span class="score-label">准确率</span>
+            <span class="score-value" id="accuracy">100%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-page" class="page">
+      <div class="result-content">
+        <h2 class="result-title">训练完成!</h2>
+        <div class="result-score">
+          <span class="result-label">最终得分</span>
+          <span class="result-value" id="final-score">0</span>
+        </div>
+        <div class="result-stats">
+          <div class="result-stat">
+            <span class="result-stat-label">准确率</span>
+            <span class="result-stat-value" id="result-accuracy">0%</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-label">最大连击</span>
+            <span class="result-stat-value" id="result-combo">0</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-label">平均反应</span>
+            <span class="result-stat-value" id="result-reaction">-</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-label">正确次数</span>
+            <span class="result-stat-value" id="result-correct">0</span>
+          </div>
+          <div class="result-stat">
+            <span class="result-stat-label">错误次数</span>
+            <span class="result-stat-value" id="result-wrong">0</span>
+          </div>
+        </div>
+        <div class="result-badge" id="result-badge"></div>
+        <button class="result-btn" id="play-again">再来一次</button>
+        <button class="result-btn secondary" id="back-to-home">返回首页</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const handleSideButton = function(e) {
+        if (e.button === 3 || e.button === 4) {
+          e.preventDefault();
+          e.stopPropagation();
+          if (e.stopImmediatePropagation) {
+            e.stopImmediatePropagation();
+          }
+          return false;
+        }
+      };
+      
+      const handleAuxClick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.stopImmediatePropagation) {
+          e.stopImmediatePropagation();
+        }
+        return false;
+      };
+      
+      document.addEventListener('mousedown', handleSideButton, { capture: true, passive: false });
+      document.addEventListener('mouseup', handleSideButton, { capture: true, passive: false });
+      document.addEventListener('click', handleSideButton, { capture: true, passive: false });
+      document.addEventListener('auxclick', handleAuxClick, { capture: true, passive: false });
+      document.addEventListener('contextmenu', handleAuxClick, { capture: true, passive: false });
+      
+      let ignorePopState = false;
+      window.addEventListener('popstate', function(e) {
+        if (!ignorePopState) {
+          e.preventDefault();
+          e.stopPropagation();
+          ignorePopState = true;
+          history.pushState(null, '', window.location.href);
+          ignorePopState = false;
+        }
+      }, { capture: true });
+      
+      history.pushState(null, '', window.location.href);
+    })();
+
+    const APP_VERSION = '1.0.0';
+    const VERSION_CHECK_URL = '';
+
+    const ALLOWED_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4', 'mouse5'];
+
+    const BALLOON_KEYS = ['shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4'];
+
+    const GAME_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4', 'mouse5'];
+
+    const BALLOON_COLORS = ['balloon-red', 'balloon-blue', 'balloon-green', 'balloon-yellow', 'balloon-purple', 'balloon-orange'];
+
+    const KEY_LABELS = {
+      'w': 'W', 'a': 'A', 's': 'S', 'd': 'D',
+      'e': 'E', 'q': 'Q', 'r': 'R', 't': 'T',
+      'f': 'F', 'c': 'C', 'v': 'V', '2': '2',
+      'shift+w': '⇧W', 'shift+a': '⇧A', 
+      'shift+d': '⇧D', 'shift+s': '⇧S',
+      'mouse4': '侧键1', 'mouse5': '侧键2'
+    };
+
+    let currentMode = '';
+    let score = 0;
+    let combo = 0;
+    let maxCombo = 0;
+    let correctCount = 0;
+    let wrongCount = 0;
+    let timeLeft = 60;
+    let timerInterval = null;
+    let currentTarget = '';
+    let currentSequence = [];
+    let sequenceIndex = 0;
+    let reactionStartTime = 0;
+    let lastReactionTime = 0;
+    let totalReactionTime = 0;
+
+    let balloons = [];
+    let balloonInterval = null;
+    let animationFrameId = null;
+    let waitingForCombo = false;
+    let shiftPressTime = 0;
+    let comboTimeout = null;
+
+    const PAGES = { HOME: 'home-page', TRAINING: 'training-page', RESULT: 'result-page' };
+
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+      
+      const targetKey = document.getElementById('target-key');
+      const sequenceDisplay = document.getElementById('sequence-display');
+      const balloonArena = document.getElementById('balloon-arena');
+      const reactionTimeDisplay = document.getElementById('reaction-time-display');
+      
+      const basicKeys = document.querySelectorAll('.keyboard-row.basic-keys');
+      const comboKeys = document.querySelectorAll('.keyboard-row.combo-keys');
+      const mouseKeys = document.querySelectorAll('.keyboard-row.mouse-row');
+      
+      if (pageId === PAGES.TRAINING) {
+        if (currentMode === 'balloon') {
+          targetKey.style.display = 'none';
+          sequenceDisplay.style.display = 'none';
+          balloonArena.style.display = 'block';
+          if (reactionTimeDisplay) reactionTimeDisplay.style.display = 'none';
+          
+          basicKeys.forEach(row => row.style.display = 'none');
+          comboKeys.forEach(row => row.style.display = 'flex');
+          mouseKeys.forEach(row => row.style.display = 'flex');
+        } else {
+          targetKey.style.display = currentMode === 'sequence' ? 'none' : 'flex';
+          sequenceDisplay.style.display = currentMode === 'sequence' ? 'flex' : 'none';
+          balloonArena.style.display = 'none';
+          if (reactionTimeDisplay) reactionTimeDisplay.style.display = currentMode === 'sequence' ? 'none' : 'block';
+          
+          basicKeys.forEach(row => row.style.display = 'flex');
+          comboKeys.forEach(row => row.style.display = 'flex');
+          mouseKeys.forEach(row => row.style.display = 'flex');
+        }
+      }
+    }
+
+    function saveBestScore(mode, newScore) {
+      const bestScores = JSON.parse(localStorage.getItem('bestScores') || '{}');
+      if (!bestScores[mode] || newScore > bestScores[mode]) {
+        bestScores[mode] = newScore;
+        localStorage.setItem('bestScores', JSON.stringify(bestScores));
+      }
+      updateBestScoresDisplay();
+    }
+
+    function saveTrainingRecord(record) {
+      const records = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
+      records.push(record);
+      localStorage.setItem('trainingRecords', JSON.stringify(records));
+    }
+
+    function updateBestScoresDisplay() {
+      const bestScores = JSON.parse(localStorage.getItem('bestScores') || '{}');
+      document.getElementById('random-best').textContent = bestScores.random || 0;
+      document.getElementById('sequence-best').textContent = bestScores.sequence || 0;
+      document.getElementById('reaction-best').textContent = bestScores.reaction || 0;
+      document.getElementById('balloon-best').textContent = bestScores.balloon || 0;
+    }
+
+    function updateOverviewStats() {
+      const records = JSON.parse(localStorage.getItem('trainingRecords') || '[]');
+      const totalGames = records.length;
+      let totalAccuracy = 0, overallMaxCombo = 0;
+      
+      records.forEach(record => {
+        totalAccuracy += record.accuracy;
+        if (record.combo > overallMaxCombo) overallMaxCombo = record.combo;
+      });
+      
+      const avgAccuracy = totalGames > 0 ? Math.round(totalAccuracy / totalGames) : 0;
+      
+      document.getElementById('total-games').textContent = totalGames;
+      document.getElementById('avg-accuracy').textContent = avgAccuracy + '%';
+      document.getElementById('max-combo').textContent = overallMaxCombo;
+    }
+
+    function getRandomKey() {
+      if (currentMode === 'balloon') {
+        return BALLOON_KEYS[Math.floor(Math.random() * BALLOON_KEYS.length)];
+      }
+      return GAME_KEYS[Math.floor(Math.random() * GAME_KEYS.length)];
+    }
+
+    function generateSequence(length) {
+      const sequence = [];
+      const keys = currentMode === 'balloon' ? BALLOON_KEYS : GAME_KEYS;
+      for (let i = 0; i < length; i++) {
+        sequence.push(keys[Math.floor(Math.random() * keys.length)]);
+      }
+      return sequence;
+    }
+
+    function updateReactionTimeDisplay() {
+      const reactionTimeDisplay = document.getElementById('reaction-time-display');
+      if (!reactionTimeDisplay) return;
+      
+      if (lastReactionTime > 0) {
+        reactionTimeDisplay.innerHTML = `
+          <div class="reaction-time-item">
+            <span class="reaction-label">上次反应</span>
+            <span class="reaction-value ${getReactionColor(lastReactionTime)}">${lastReactionTime}ms</span>
+          </div>
+        `;
+      }
+    }
+
+    function getReactionColor(time) {
+      if (time <= 200) return 'reaction-excellent';
+      if (time <= 300) return 'reaction-good';
+      if (time <= 400) return 'reaction-average';
+      return 'reaction-slow';
+    }
+
+    function updateTargetKeyDisplay() {
+      const targetKeyElement = document.getElementById('target-key');
+      if (currentMode === 'sequence') {
+        targetKeyElement.style.display = 'none';
+        updateSequenceDisplay();
+      } else if (currentMode !== 'balloon') {
+        targetKeyElement.style.display = 'flex';
+        document.getElementById('sequence-display').innerHTML = '';
+        targetKeyElement.textContent = KEY_LABELS[currentTarget] || currentTarget.toUpperCase();
+      }
+      
+      document.querySelectorAll('.key').forEach(key => key.classList.remove('target'));
+      if (currentTarget && currentMode !== 'balloon') {
+        const targetKey = document.querySelector(`.key[data-key="${currentTarget}"]`);
+        if (targetKey) targetKey.classList.add('target');
+      }
+    }
+
+    function updateSequenceDisplay() {
+      const display = document.getElementById('sequence-display');
+      display.innerHTML = '';
+      
+      currentSequence.forEach((key, index) => {
+        const keyElement = document.createElement('div');
+        keyElement.className = 'sequence-key';
+        if (index < sequenceIndex) keyElement.classList.add('done');
+        else if (index === sequenceIndex) keyElement.classList.add('active');
+        keyElement.textContent = KEY_LABELS[key] || key.toUpperCase();
+        display.appendChild(keyElement);
+      });
+    }
+
+    function startTimer() {
+      timeLeft = 60;
+      updateTimerDisplay();
+      
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) endTraining();
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const timerElement = document.getElementById('timer');
+      timerElement.textContent = timeLeft;
+      
+      timerElement.classList.remove('warning', 'danger');
+      if (timeLeft <= 10) timerElement.classList.add('danger');
+      else if (timeLeft <= 20) timerElement.classList.add('warning');
+    }
+
+    function updateScoreDisplay() {
+      document.getElementById('score').textContent = score;
+      document.getElementById('combo').textContent = combo;
+      
+      const accuracy = correctCount + wrongCount > 0 
+        ? Math.round((correctCount / (correctCount + wrongCount)) * 100)
+        : 100;
+      document.getElementById('accuracy').textContent = accuracy + '%';
+    }
+
+    function createBalloon(key) {
+      const arena = document.getElementById('balloon-arena');
+      
+      const balloon = document.createElement('div');
+      balloon.className = 'balloon';
+      balloon.style.top = '-100px';
+      
+      const colorClass = BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)];
+      const balloonBody = document.createElement('div');
+      balloonBody.className = `balloon-body ${colorClass}`;
+      
+      const label = document.createElement('span');
+      label.className = 'balloon-key';
+      label.textContent = KEY_LABELS[key] || key.toUpperCase();
+      balloonBody.appendChild(label);
+      
+      const string = document.createElement('div');
+      string.className = 'balloon-string';
+      
+      balloon.appendChild(balloonBody);
+      balloon.appendChild(string);
+      
+      const maxLeft = arena.offsetWidth - 90;
+      const left = Math.random() * maxLeft;
+      balloon.style.left = left + 'px';
+      
+      const speed = 1.5 + Math.random() * 1;
+      
+      const balloonData = {
+        element: balloon,
+        key: key,
+        top: -100,
+        speed: speed,
+        active: true
+      };
+      
+      balloons.push(balloonData);
+      arena.appendChild(balloon);
+    }
+
+    function updateBalloons() {
+      const arena = document.getElementById('balloon-arena');
+      const lineY = arena.offsetHeight - 50;
+      const warningY = lineY - 100;
+      
+      balloons.forEach((balloon, index) => {
+        if (!balloon.active) return;
+        
+        balloon.top += balloon.speed;
+        balloon.element.style.top = balloon.top + 'px';
+        
+        if (balloon.top >= warningY && balloon.top < lineY) {
+          balloon.element.querySelector('.balloon-body').classList.add('balloon-warning');
+        }
+        
+        if (balloon.top >= lineY) {
+          balloon.active = false;
+          balloon.element.querySelector('.balloon-body').classList.remove('balloon-warning');
+          balloon.element.classList.add('balloon-miss');
+          
+          combo = 0;
+          wrongCount++;
+          score = Math.max(0, score - 10);
+          updateScoreDisplay();
+          
+          setTimeout(() => {
+            if (balloon.element.parentNode) balloon.element.remove();
+          }, 500);
+        }
+      });
+      
+      balloons = balloons.filter(b => b.active || b.element.parentNode);
+    }
+
+    function checkBalloonHit(key) {
+      const arena = document.getElementById('balloon-arena');
+      const lineY = arena.offsetHeight - 50;
+      
+      for (let i = balloons.length - 1; i >= 0; i--) {
+        const balloon = balloons[i];
+        if (!balloon.active) continue;
+        
+        if (balloon.key === key && balloon.top >= 0 && balloon.top < lineY) {
+          balloon.active = false;
+          balloon.element.classList.add('balloon-pop');
+          balloon.element.querySelector('.balloon-body').classList.remove('balloon-warning');
+          
+          combo++;
+          if (combo > maxCombo) maxCombo = combo;
+          correctCount++;
+          
+          const positionBonus = Math.floor((1 - balloon.top / lineY) * 20);
+          const comboBonus = Math.floor(combo / 5) * 5;
+          score += 15 + positionBonus + comboBonus;
+          
+          updateScoreDisplay();
+          
+          setTimeout(() => {
+            if (balloon.element.parentNode) balloon.element.remove();
+          }, 300);
+          
+          return true;
+        }
+      }
+      
+      return false;
+    }
+
+    function startBalloonMode() {
+      balloons = [];
+      
+      createBalloon(getRandomKey());
+      
+      balloonInterval = setInterval(() => {
+        if (balloons.length < 6 && Math.random() > 0.3) {
+          createBalloon(getRandomKey());
+        }
+      }, 1200);
+      
+      function animate() {
+        updateBalloons();
+        animationFrameId = requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    function stopBalloonMode() {
+      if (balloonInterval) {
+        clearInterval(balloonInterval);
+        balloonInterval = null;
+      }
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+      
+      balloons.forEach(balloon => {
+        if (balloon.element.parentNode) balloon.element.remove();
+      });
+      balloons = [];
+    }
+
+    function highlightShiftKeys(highlight) {
+      const shiftKeys = ['shift+w', 'shift+a', 'shift+s', 'shift+d'];
+      shiftKeys.forEach(k => {
+        const el = document.querySelector(`.key[data-key="${k}"]`);
+        if (el) {
+          el.style.borderColor = highlight ? 'var(--accent-yellow)' : '';
+          el.style.boxShadow = highlight ? '0 0 10px rgba(255, 165, 2, 0.5)' : '';
+        }
+      });
+    }
+
+    function processKey(key) {
+      const keyElement = document.querySelector(`.key[data-key="${key}"]`);
+      if (keyElement) {
+        keyElement.classList.add('pressed');
+        setTimeout(() => keyElement.classList.remove('pressed'), 100);
+      }
+      
+      if (currentMode === 'random') handleRandomMode(key);
+      else if (currentMode === 'sequence') handleSequenceMode(key);
+      else if (currentMode === 'reaction') handleReactionMode(key);
+      else if (currentMode === 'balloon') handleBalloonMode(key);
+    }
+
+    function handleKeyPress(event) {
+      const key = event.key.toLowerCase();
+      
+      if (key === 'shift' || event.keyCode === 16) {
+        event.preventDefault();
+        
+        if (comboTimeout) clearTimeout(comboTimeout);
+        
+        waitingForCombo = true;
+        shiftPressTime = Date.now();
+        highlightShiftKeys(true);
+        
+        comboTimeout = setTimeout(() => {
+          if (waitingForCombo) {
+            waitingForCombo = false;
+            highlightShiftKeys(false);
+          }
+        }, 500);
+        
+        return;
+      }
+      
+      if (waitingForCombo && ['w', 'a', 's', 'd'].includes(key)) {
+        const timeSinceShift = Date.now() - shiftPressTime;
+        
+        if (timeSinceShift >= 0 && timeSinceShift <= 500) {
+          const comboKey = 'shift+' + key;
+          waitingForCombo = false;
+          if (comboTimeout) clearTimeout(comboTimeout);
+          highlightShiftKeys(false);
+          processKey(comboKey);
+          return;
+        }
+      }
+      
+      if (waitingForCombo) {
+        waitingForCombo = false;
+        if (comboTimeout) clearTimeout(comboTimeout);
+        highlightShiftKeys(false);
+      }
+      
+      if (!ALLOWED_KEYS.includes(key)) return;
+      
+      processKey(key);
+    }
+
+    function handleMouseButton(event) {
+      let key = null;
+      
+      if (event.button === 3) key = 'mouse4';
+      else if (event.button === 4) key = 'mouse5';
+      
+      if (!key) return;
+      
+      event.preventDefault();
+      event.stopPropagation();
+      
+      if (event.stopImmediatePropagation) {
+        event.stopImmediatePropagation();
+      }
+      
+      processKey(key);
+      return false;
+    }
+
+    function handleRandomMode(key) {
+      const targetKeyElement = document.getElementById('target-key');
+      
+      if (key === currentTarget) {
+        const reactionTime = Date.now() - reactionStartTime;
+        lastReactionTime = reactionTime;
+        totalReactionTime += reactionTime;
+        
+        combo++;
+        if (combo > maxCombo) maxCombo = combo;
+        correctCount++;
+        score += 10 * (1 + Math.floor(combo / 10));
+        
+        targetKeyElement.classList.add('pressed');
+        setTimeout(() => targetKeyElement.classList.remove('pressed'), 100);
+        
+        currentTarget = getRandomKey();
+        reactionStartTime = Date.now();
+      } else {
+        combo = 0;
+        wrongCount++;
+        score = Math.max(0, score - 5);
+        
+        targetKeyElement.classList.add('wrong');
+        setTimeout(() => targetKeyElement.classList.remove('wrong'), 200);
+      }
+      
+      updateTargetKeyDisplay();
+      updateScoreDisplay();
+      updateReactionTimeDisplay();
+    }
+
+    function handleSequenceMode(key) {
+      const targetKeyElement = document.getElementById('target-key');
+      
+      if (key === currentSequence[sequenceIndex]) {
+        combo++;
+        if (combo > maxCombo) maxCombo = combo;
+        correctCount++;
+        score += 15 * (1 + Math.floor(combo / 5));
+        
+        sequenceIndex++;
+        
+        if (sequenceIndex >= currentSequence.length) {
+          const newLength = Math.min(currentSequence.length + 1, 8);
+          currentSequence = generateSequence(newLength);
+          sequenceIndex = 0;
+        }
+      } else {
+        combo = 0;
+        wrongCount++;
+        score = Math.max(0, score - 5);
+        
+        targetKeyElement.classList.add('wrong');
+        setTimeout(() => targetKeyElement.classList.remove('wrong'), 200);
+      }
+      
+      updateTargetKeyDisplay();
+      updateScoreDisplay();
+    }
+
+    function handleReactionMode(key) {
+      const targetKeyElement = document.getElementById('target-key');
+      const reactionTime = Date.now() - reactionStartTime;
+      lastReactionTime = reactionTime;
+      totalReactionTime += reactionTime;
+      
+      if (key === currentTarget) {
+        combo++;
+        if (combo > maxCombo) maxCombo = combo;
+        correctCount++;
+        
+        const bonusPoints = Math.max(0, Math.floor((500 - reactionTime) / 50));
+        score += 20 + bonusPoints;
+        
+        targetKeyElement.classList.add('pressed');
+        setTimeout(() => targetKeyElement.classList.remove('pressed'), 100);
+        
+        setTimeout(() => {
+          currentTarget = getRandomKey();
+          reactionStartTime = Date.now();
+          updateTargetKeyDisplay();
+        }, 200);
+      } else {
+        combo = 0;
+        wrongCount++;
+        score = Math.max(0, score - 5);
+        
+        targetKeyElement.classList.add('wrong');
+        setTimeout(() => targetKeyElement.classList.remove('wrong'), 200);
+      }
+      
+      updateScoreDisplay();
+      updateReactionTimeDisplay();
+    }
+
+    function handleBalloonMode(key) {
+      if (!checkBalloonHit(key)) {
+        combo = 0;
+        wrongCount++;
+        score = Math.max(0, score - 5);
+        updateScoreDisplay();
+      }
+    }
+
+    function startTraining(mode) {
+      currentMode = mode;
+      score = 0;
+      combo = 0;
+      maxCombo = 0;
+      correctCount = 0;
+      wrongCount = 0;
+      lastReactionTime = 0;
+      totalReactionTime = 0;
+      
+      waitingForCombo = false;
+      if (comboTimeout) {
+        clearTimeout(comboTimeout);
+        comboTimeout = null;
+      }
+      highlightShiftKeys(false);
+      
+      const modeNames = {
+        random: '随机按键模式',
+        sequence: '序列按键模式',
+        reaction: '反应训练模式',
+        balloon: '气球大战'
+      };
+      document.getElementById('training-title').textContent = modeNames[mode];
+      
+      if (mode === 'random') {
+        currentTarget = getRandomKey();
+        reactionStartTime = Date.now();
+        document.getElementById('target-key').style.display = 'flex';
+        document.getElementById('sequence-display').style.display = 'none';
+        document.getElementById('balloon-arena').style.display = 'none';
+      } else if (mode === 'sequence') {
+        currentSequence = generateSequence(2);
+        sequenceIndex = 0;
+        document.getElementById('target-key').style.display = 'none';
+        document.getElementById('sequence-display').style.display = 'flex';
+        document.getElementById('balloon-arena').style.display = 'none';
+      } else if (mode === 'reaction') {
+        currentTarget = getRandomKey();
+        reactionStartTime = Date.now();
+        document.getElementById('target-key').style.display = 'flex';
+        document.getElementById('sequence-display').style.display = 'none';
+        document.getElementById('balloon-arena').style.display = 'none';
+      } else if (mode === 'balloon') {
+        document.getElementById('target-key').style.display = 'none';
+        document.getElementById('sequence-display').style.display = 'none';
+        document.getElementById('balloon-arena').style.display = 'block';
+      }
+      
+      updateTargetKeyDisplay();
+      updateScoreDisplay();
+      updateReactionTimeDisplay();
+      startTimer();
+      
+      if (mode === 'balloon') startBalloonMode();
+      
+      showPage(PAGES.TRAINING);
+    }
+
+    function endTraining() {
+      clearInterval(timerInterval);
+      stopBalloonMode();
+      
+      waitingForCombo = false;
+      if (comboTimeout) {
+        clearTimeout(comboTimeout);
+        comboTimeout = null;
+      }
+      
+      const accuracy = correctCount + wrongCount > 0 
+        ? Math.round((correctCount / (correctCount + wrongCount)) * 100)
+        : 0;
+      
+      const avgReactionTime = correctCount > 0 
+        ? Math.round(totalReactionTime / correctCount)
+        : 0;
+      
+      saveBestScore(currentMode, score);
+      
+      const record = {
+        id: Date.now().toString(),
+        mode: currentMode,
+        score,
+        accuracy,
+        combo: maxCombo,
+        keyCount: correctCount + wrongCount,
+        correctCount,
+        avgReactionTime,
+        timestamp: Date.now()
+      };
+      saveTrainingRecord(record);
+      
+      document.getElementById('final-score').textContent = score;
+      document.getElementById('result-accuracy').textContent = accuracy + '%';
+      document.getElementById('result-combo').textContent = maxCombo;
+      document.getElementById('result-correct').textContent = correctCount;
+      document.getElementById('result-wrong').textContent = wrongCount;
+      
+      const avgReactionElement = document.getElementById('result-reaction');
+      if (avgReactionElement) {
+        avgReactionElement.textContent = avgReactionTime > 0 ? `${avgReactionTime}ms` : '-';
+        avgReactionElement.style.display = 'block';
+      }
+      
+      const badgeElement = document.getElementById('result-badge');
+      badgeElement.textContent = score >= 500 ? '🏆' : score >= 300 ? '⭐' : score >= 150 ? '👍' : '💪';
+      
+      showPage(PAGES.RESULT);
+    }
+
+    function shareApp() {
+      const shareText = `🎮 指尖训练师 v${APP_VERSION}\n\n提升你的PC游戏操作熟练度！\n\n包含4种训练模式：\n• 随机按键 - 提升反应速度\n• 序列按键 - 锻炼肌肉记忆\n• 反应训练 - 快速反应测试\n• 气球大战 - 趣味训练\n\n快来试试吧！`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: '指尖训练师',
+          text: shareText,
+          url: window.location.href
+        }).catch(() => {
+          copyToClipboard(shareText + '\n\n' + window.location.href);
+        });
+      } else {
+        copyToClipboard(shareText + '\n\n' + window.location.href);
+      }
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+          alert('分享链接已复制到剪贴板！');
+        }).catch(() => {
+          fallbackCopy(text);
+        });
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        alert('分享链接已复制到剪贴板！');
+      } catch (err) {
+        alert('复制失败，请手动复制链接：\n' + window.location.href);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    function initEventListeners() {
+      document.querySelectorAll('.mode-card').forEach(card => {
+        card.addEventListener('click', () => startTraining(card.dataset.mode));
+      });
+      
+      document.getElementById('back-btn').addEventListener('click', () => {
+        clearInterval(timerInterval);
+        stopBalloonMode();
+        waitingForCombo = false;
+        if (comboTimeout) clearTimeout(comboTimeout);
+        highlightShiftKeys(false);
+        showPage(PAGES.HOME);
+      });
+      
+      document.getElementById('play-again').addEventListener('click', () => startTraining(currentMode));
+      
+      document.getElementById('back-to-home').addEventListener('click', () => {
+        showPage(PAGES.HOME);
+        updateOverviewStats();
+      });
+      
+      document.getElementById('clear-data').addEventListener('click', () => {
+        if (confirm('确定要清除所有训练数据吗？')) {
+          localStorage.removeItem('bestScores');
+          localStorage.removeItem('trainingRecords');
+          updateBestScoresDisplay();
+          updateOverviewStats();
+        }
+      });
+      
+      document.getElementById('share-btn').addEventListener('click', () => {
+        shareApp();
+      });
+      
+      window.addEventListener('keydown', handleKeyPress);
+      
+      window.addEventListener('mousedown', handleMouseButton, { capture: true, passive: false });
+      window.addEventListener('mouseup', handleMouseButton, { capture: true, passive: false });
+      window.addEventListener('click', handleMouseButton, { capture: true, passive: false });
+      window.addEventListener('auxclick', handleMouseButton, { capture: true, passive: false });
+      
+      document.addEventListener('contextmenu', e => e.preventDefault());
+      
+      window.addEventListener('popstate', function(e) {
+        if (currentMode !== '') {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, { capture: true });
+    }
+
+    function init() {
+      const versionElement = document.getElementById('app-version');
+      if (versionElement) {
+        versionElement.textContent = 'v' + APP_VERSION;
+      }
+      
+      updateBestScoresDisplay();
+      updateOverviewStats();
+      initEventListeners();
+      showPage(PAGES.HOME);
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
