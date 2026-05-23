@@ -496,6 +496,256 @@
     .balloon-purple { background: linear-gradient(135deg, #bb8fce 0%, #9b59b6 100%); color: #7d3c98; }
     .balloon-orange { background: linear-gradient(135deg, #f0b27a 0%, #e67e22 100%); color: #b8560b; }
 
+    .sword-arena {
+      width: 100%;
+      max-width: 800px;
+      height: 350px;
+      background: linear-gradient(180deg, rgba(10, 10, 30, 0.5) 0%, rgba(20, 20, 50, 0.7) 100%);
+      border: 2px solid rgba(100, 100, 200, 0.3);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .sword-line {
+      position: absolute;
+      bottom: 50px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #5566ff, #7788ff, #5566ff);
+      box-shadow: 0 0 20px rgba(85, 102, 255, 0.5);
+    }
+
+    .player {
+      position: absolute;
+      bottom: 54px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .player-body {
+      width: 60px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .player-head {
+      width: 30px;
+      height: 30px;
+      background: radial-gradient(circle, #ffcc99 0%, #ddaa77 100%);
+      border-radius: 50%;
+      border: 2px solid #aa8855;
+    }
+
+    .player-torso {
+      width: 40px;
+      height: 30px;
+      background: linear-gradient(180deg, #4466ff 0%, #2244cc 100%);
+      border-radius: 5px;
+      margin-top: 2px;
+    }
+
+    .player-legs {
+      width: 30px;
+      height: 20px;
+      background: linear-gradient(180deg, #555555 0%, #333333 100%);
+      border-radius: 0 0 5px 5px;
+    }
+
+    .player {
+      transition: transform 0.3s ease-out;
+    }
+
+    .player.hit {
+      animation: hit 0.3s ease-out;
+    }
+
+    @keyframes hit {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(0.5) sepia(1) hue-rotate(-50deg); }
+    }
+
+    .player-stunned {
+      animation: stun-flash 0.1s infinite;
+    }
+
+    @keyframes stun-flash {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(0.7) sepia(1) hue-rotate(-60deg); }
+    }
+
+    .sword {
+      position: absolute;
+      z-index: 5;
+      pointer-events: none;
+      transform: translateX(-50%);
+      transition: left 0.05s linear;
+    }
+
+    .sword-blade {
+      width: 8px;
+      height: 60px;
+      background: linear-gradient(90deg, #c0c0c0 0%, #ffffff 50%, #c0c0c0 100%);
+      border-radius: 2px 2px 0 0;
+      position: relative;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .sword-blade::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 2px;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(90deg, #e0e0e0, #ffffff, #e0e0e0);
+    }
+
+    .sword-hilt {
+      width: 20px;
+      height: 10px;
+      background: linear-gradient(90deg, #663300 0%, #885522 50%, #663300 100%);
+      margin: 0 auto;
+      border-radius: 2px;
+    }
+
+    .sword-handle {
+      width: 12px;
+      height: 20px;
+      background: linear-gradient(90deg, #442200 0%, #664422 50%, #442200 100%);
+      margin: 0 auto;
+      border-radius: 0 0 3px 3px;
+    }
+
+    .sword-warning {
+      animation: swordShake 0.2s ease-in-out infinite;
+    }
+
+    @keyframes swordShake {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      25% { transform: translateX(-3px) rotate(-1deg); }
+      75% { transform: translateX(3px) rotate(1deg); }
+    }
+
+    .message {
+      position: absolute;
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 30;
+    }
+
+    .message.show {
+      opacity: 1;
+    }
+
+    .sword-destroy {
+      animation: sword-destroy 0.2s ease-out forwards;
+    }
+
+    @keyframes sword-destroy {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.5);
+        opacity: 0.5;
+      }
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    .dodge-effect {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.8) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: dodge-effect 0.3s ease-out forwards;
+    }
+
+    @keyframes dodge-effect {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(2);
+        opacity: 0;
+      }
+    }
+
+    .health-bar-container {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+    }
+
+    .health-bar-label {
+      text-align: center;
+      color: #aaa;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .health-bar {
+      width: 100%;
+      height: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 2px solid #555;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .health-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff4444 0%, #ff6666 100%);
+      transition: width 0.3s ease-out;
+      border-radius: 8px;
+      width: 100%;
+    }
+
+    .health-bar-fill.low-health {
+      background: linear-gradient(90deg, #ff0000 0%, #ff4444 100%);
+      animation: lowHealth 0.5s ease-in-out infinite;
+    }
+
+    @keyframes lowHealth {
+      0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+      50% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+    }
+
+    .dodge-prompt {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 200, 255, 0.8);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 20;
+    }
+
     .keyboard-visual {
       display: flex;
       flex-direction: column;
@@ -774,6 +1024,15 @@
             <span>最佳: <strong id="balloon-best">0</strong> 分</span>
           </div>
         </div>
+
+        <div class="mode-card" data-mode="sword">
+          <div class="mode-icon">⚔️</div>
+          <h3>剑雨模式</h3>
+          <p>躲避从天而降的剑，在时间内闪避来获得高分！</p>
+          <div class="mode-stats">
+            <span>最佳: <strong id="sword-best">0</strong> 分</span>
+          </div>
+        </div>
       </div>
 
       <div class="stats-overview">
@@ -829,8 +1088,26 @@
           <div class="balloon-line" id="balloon-line"></div>
         </div>
 
+        <div class="sword-arena" id="sword-arena">
+          <div class="sword-line" id="sword-line"></div>
+          <div class="player" id="player">
+            <div class="player-body">
+              <div class="player-head"></div>
+              <div class="player-torso"></div>
+              <div class="player-legs"></div>
+            </div>
+          </div>
+          <div class="health-bar-container">
+            <div class="health-bar-label">生命值</div>
+            <div class="health-bar">
+              <div class="health-bar-fill" id="health-bar-fill"></div>
+            </div>
+          </div>
+          <div class="message" id="sword-message"></div>
+        </div>
+
         <div class="keyboard-visual">
-          <div class="keyboard-instruction">
+          <div class="keyboard-instruction" id="keyboard-instruction">
             💡 使用说明：组合键（Shift + W/A/S/D）或鼠标侧键
           </div>
           <div class="keyboard-row basic-keys">
@@ -956,11 +1233,11 @@
     const APP_VERSION = '1.0.0';
     const VERSION_CHECK_URL = '';
 
-    const ALLOWED_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4', 'mouse5'];
+    const ALLOWED_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4'];
 
     const BALLOON_KEYS = ['shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4'];
 
-    const GAME_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4', 'mouse5'];
+    const GAME_KEYS = ['w', 'a', 's', 'd', 'e', 'q', 'r', 't', 'f', 'c', 'v', '2', 'shift+w', 'shift+a', 'shift+d', 'shift+s', 'mouse4'];
 
     const BALLOON_COLORS = ['balloon-red', 'balloon-blue', 'balloon-green', 'balloon-yellow', 'balloon-purple', 'balloon-orange'];
 
@@ -970,7 +1247,7 @@
       'f': 'F', 'c': 'C', 'v': 'V', '2': '2',
       'shift+w': '⇧W', 'shift+a': '⇧A', 
       'shift+d': '⇧D', 'shift+s': '⇧S',
-      'mouse4': '侧键1', 'mouse5': '侧键2'
+      'mouse4': '侧键1'
     };
 
     let currentMode = '';
@@ -991,9 +1268,22 @@
     let balloons = [];
     let balloonInterval = null;
     let animationFrameId = null;
+    
+    let swords = [];
+    let swordInterval = null;
+    let swordAnimationFrameId = null;
+    let playerHealth = 5;
+    let maxHealth = 5;
+    let lastDodgeTime = 0;
+    let playerOffset = 0;
+    const maxOffset = 150;
+    let dodgeCooldown = 100;
     let waitingForCombo = false;
     let shiftPressTime = 0;
     let comboTimeout = null;
+    let isStunned = false;
+    let stunTimeout = null;
+    let swordSpawnTimer = null;
 
     const PAGES = { HOME: 'home-page', TRAINING: 'training-page', RESULT: 'result-page' };
 
@@ -1004,6 +1294,7 @@
       const targetKey = document.getElementById('target-key');
       const sequenceDisplay = document.getElementById('sequence-display');
       const balloonArena = document.getElementById('balloon-arena');
+      const swordArena = document.getElementById('sword-arena');
       const reactionTimeDisplay = document.getElementById('reaction-time-display');
       
       const basicKeys = document.querySelectorAll('.keyboard-row.basic-keys');
@@ -1015,15 +1306,29 @@
           targetKey.style.display = 'none';
           sequenceDisplay.style.display = 'none';
           balloonArena.style.display = 'block';
+          swordArena.style.display = 'none';
           if (reactionTimeDisplay) reactionTimeDisplay.style.display = 'none';
           
           basicKeys.forEach(row => row.style.display = 'none');
           comboKeys.forEach(row => row.style.display = 'flex');
           mouseKeys.forEach(row => row.style.display = 'flex');
+        } else if (currentMode === 'sword') {
+          targetKey.style.display = 'none';
+          sequenceDisplay.style.display = 'none';
+          balloonArena.style.display = 'none';
+          swordArena.style.display = 'block';
+          if (reactionTimeDisplay) reactionTimeDisplay.style.display = 'none';
+          
+          basicKeys.forEach(row => row.style.display = 'none');
+          comboKeys.forEach(row => row.style.display = 'flex');
+          mouseKeys.forEach(row => row.style.display = 'flex');
+          
+          document.getElementById('keyboard-instruction').textContent = '💡 左闪避：⇧W/⇧A/侧键1 | 右闪避：⇧S/⇧D';
         } else {
           targetKey.style.display = currentMode === 'sequence' ? 'none' : 'flex';
           sequenceDisplay.style.display = currentMode === 'sequence' ? 'flex' : 'none';
           balloonArena.style.display = 'none';
+          swordArena.style.display = 'none';
           if (reactionTimeDisplay) reactionTimeDisplay.style.display = currentMode === 'sequence' ? 'none' : 'block';
           
           basicKeys.forEach(row => row.style.display = 'flex');
@@ -1054,6 +1359,7 @@
       document.getElementById('sequence-best').textContent = bestScores.sequence || 0;
       document.getElementById('reaction-best').textContent = bestScores.reaction || 0;
       document.getElementById('balloon-best').textContent = bestScores.balloon || 0;
+      document.getElementById('sword-best').textContent = bestScores.sword || 0;
     }
 
     function updateOverviewStats() {
@@ -1313,7 +1619,300 @@
       });
       balloons = [];
     }
+    
+    function createSword() {
+      if (swords.length >= 2) return;
+      
+      const arena = document.getElementById('sword-arena');
+      
+      const sword = document.createElement('div');
+      sword.className = 'sword';
+      
+      const swordHandle = document.createElement('div');
+      swordHandle.className = 'sword-handle';
+      
+      const swordHilt = document.createElement('div');
+      swordHilt.className = 'sword-hilt';
+      
+      const swordBlade = document.createElement('div');
+      swordBlade.className = 'sword-blade';
+      
+      sword.appendChild(swordHandle);
+      sword.appendChild(swordHilt);
+      sword.appendChild(swordBlade);
+      
+      const left = getPlayerCenterX();
+      
+      sword.style.left = left + 'px';
+      sword.style.top = '-80px';
+      
+      const swordData = {
+        element: sword,
+        top: -80,
+        left: left,
+        speed: 2.5,
+        active: true
+      };
+      
+      swords.push(swordData);
+      arena.appendChild(sword);
+    }
+    
+    function showMessage(text, color = '#00ff88') {
+      const message = document.getElementById('sword-message');
+      message.textContent = text;
+      message.style.color = color;
+      message.classList.add('show');
+      setTimeout(() => message.classList.remove('show'), 500);
+    }
+    
+    function getPlayerCenterX() {
+      const arena = document.getElementById('sword-arena');
+      const arenaWidth = arena.offsetWidth;
+      const centerX = arenaWidth / 2;
+      return centerX + playerOffset;
+    }
+    
+    function updatePlayerPosition() {
+      const player = document.getElementById('player');
+      player.style.left = '50%';
+      player.style.transform = `translateX(calc(-50% + ${playerOffset}px))`;
+    }
+    
+    function updateSwords() {
+      const arena = document.getElementById('sword-arena');
+      const arenaHeight = arena.offsetHeight;
+      const lineY = arenaHeight - 50;
+      const warningY = lineY - 150;
+      const playerTop = lineY - 80;
+      const playerWidth = 60;
+      
+      for (let i = swords.length - 1; i >= 0; i--) {
+        const sword = swords[i];
+        if (!sword.active) continue;
+        
+        sword.top += sword.speed;
+        sword.element.style.top = sword.top + 'px';
+        
+        sword.left = getPlayerCenterX();
+        sword.element.style.left = sword.left + 'px';
+        
+        if (sword.top >= warningY && sword.top < lineY) {
+          sword.element.classList.add('sword-warning');
+        }
+        
+        const swordCenterY = sword.top + 60;
+        if (swordCenterY >= playerTop && swordCenterY <= playerTop + 80) {
+          const playerLeft = getPlayerCenterX() - playerWidth / 2;
+          const playerRight = getPlayerCenterX() + playerWidth / 2;
+          const swordX = sword.left;
+          
+          if (swordX >= playerLeft && swordX <= playerRight) {
+            swordHit(sword, i);
+            sword.active = false;
+            removeSword(i);
+          }
+        }
+        
+        if (sword.top > arenaHeight + 50) {
+          removeSword(i);
+        }
+      }
+    }
+    
+    function removeSword(index) {
+      const sword = swords[index];
+      if (sword && sword.element.parentNode) {
+        sword.element.remove();
+      }
+      swords.splice(index, 1);
+    }
 
+    function enterStun() {
+      isStunned = true;
+      const player = document.getElementById('player');
+      player.classList.add('player-stunned');
+      showMessage('僵直中！', '#ff4757');
+      
+      stunTimeout = setTimeout(() => {
+        isStunned = false;
+        player.classList.remove('player-stunned');
+      }, 300);
+    }
+    
+    function swordHit(sword, index) {
+      sword.active = false;
+      removeSword(index);
+      
+      playerHealth--;
+      updateHealthBar();
+      
+      combo = 0;
+      wrongCount++;
+      updateScoreDisplay();
+      
+      const player = document.getElementById('player');
+      player.classList.add('hit');
+      setTimeout(() => player.classList.remove('hit'), 300);
+      
+      enterStun();
+      
+      if (playerHealth <= 0) {
+        stopSwordMode();
+        endTraining();
+      }
+    }
+    
+    function handleDodge(direction) {
+      if (currentMode !== 'sword') return;
+      
+      if (isStunned) {
+        showMessage('僵直中！', '#ff4757');
+        return;
+      }
+      
+      const now = Date.now();
+      if (now - lastDodgeTime < dodgeCooldown) return;
+      
+      lastDodgeTime = now;
+      
+      if (direction === 'left') {
+        playerOffset = Math.max(-maxOffset, playerOffset - 80);
+      } else {
+        playerOffset = Math.min(maxOffset, playerOffset + 80);
+      }
+      updatePlayerPosition();
+      
+      const arena = document.getElementById('sword-arena');
+      const playerTop = arena.offsetHeight - 50 - 80;
+      const dodgeRange = 30 + Math.random() * 30;
+      
+      for (let i = swords.length - 1; i >= 0; i--) {
+        const sword = swords[i];
+        if (!sword.active) continue;
+        
+        const swordBottom = sword.top + 80;
+        const distance = playerTop - swordBottom;
+        
+        if (distance >= 0 && distance <= dodgeRange) {
+          sword.active = false;
+          removeSword(i);
+          
+          combo++;
+          if (combo > maxCombo) maxCombo = combo;
+          correctCount++;
+          
+          const comboBonus = Math.floor(combo / 3) * 10;
+          score += 20 + comboBonus;
+          updateScoreDisplay();
+          
+          showMessage('闪避成功！', '#00ff88');
+          
+          const hitEffect = document.createElement('div');
+          hitEffect.className = 'dodge-effect';
+          hitEffect.style.left = (sword.left - 20) + 'px';
+          hitEffect.style.top = sword.top + 'px';
+          arena.appendChild(hitEffect);
+          
+          setTimeout(() => {
+            if (hitEffect.parentNode) hitEffect.remove();
+          }, 300);
+          
+          return;
+        }
+      }
+    }
+    
+    function updateComboDisplay() {
+      document.getElementById('combo').textContent = combo;
+    }
+    
+    function gameLoop() {
+      if (currentMode !== 'sword') return;
+      
+      updateSwords();
+      swordAnimationFrameId = requestAnimationFrame(gameLoop);
+    }
+    
+    function startSwordMode() {
+      stopSwordMode();
+      
+      score = 0;
+      combo = 0;
+      maxCombo = 0;
+      correctCount = 0;
+      wrongCount = 0;
+      playerHealth = maxHealth;
+      lastDodgeTime = 0;
+      playerOffset = 0;
+      isStunned = false;
+      if (stunTimeout) clearTimeout(stunTimeout);
+      const player = document.getElementById('player');
+      player.classList.remove('player-stunned');
+      updatePlayerPosition();
+      updateHealthBar();
+      swords = [];
+      updateScoreDisplay();
+      updateComboDisplay();
+      
+      setTimeout(() => {
+        createSword();
+        scheduleNextSword();
+      }, 1000);
+      
+      gameLoop();
+    }
+
+    function scheduleNextSword() {
+      if (currentMode !== 'sword' || timeLeft <= 0) return;
+      
+      if (swords.length < 2) {
+        createSword();
+      }
+      
+      const delay = 1500 + Math.random() * 500;
+      swordSpawnTimer = setTimeout(scheduleNextSword, delay);
+    }
+    
+    function stopSwordMode() {
+      if (swordAnimationFrameId) {
+        cancelAnimationFrame(swordAnimationFrameId);
+        swordAnimationFrameId = null;
+      }
+      if (swordSpawnTimer) {
+        clearTimeout(swordSpawnTimer);
+        swordSpawnTimer = null;
+      }
+      
+      swords.forEach(sword => {
+        if (sword.element.parentNode) sword.element.remove();
+      });
+      swords = [];
+    }
+    
+    function handleComboKey(comboKey) {
+      const leftKeys = ['shift+w', 'shift+a', 'mouse4'];
+      const rightKeys = ['shift+s', 'shift+d'];
+      
+      if (leftKeys.includes(comboKey)) {
+        handleDodge('left');
+      } else if (rightKeys.includes(comboKey)) {
+        handleDodge('right');
+      }
+    }
+    
+    function updateHealthBar() {
+      const healthFill = document.getElementById('health-bar-fill');
+      const healthPercent = (playerHealth / maxHealth) * 100;
+      healthFill.style.width = healthPercent + '%';
+      
+      if (healthPercent <= 40) {
+        healthFill.classList.add('low-health');
+      } else {
+        healthFill.classList.remove('low-health');
+      }
+    }
+    
     function highlightShiftKeys(highlight) {
       const shiftKeys = ['shift+w', 'shift+a', 'shift+s', 'shift+d'];
       shiftKeys.forEach(k => {
@@ -1355,7 +1954,7 @@
             waitingForCombo = false;
             highlightShiftKeys(false);
           }
-        }, 500);
+        }, 200);
         
         return;
       }
@@ -1363,12 +1962,17 @@
       if (waitingForCombo && ['w', 'a', 's', 'd'].includes(key)) {
         const timeSinceShift = Date.now() - shiftPressTime;
         
-        if (timeSinceShift >= 0 && timeSinceShift <= 500) {
+        if (timeSinceShift >= 0 && timeSinceShift <= 200) {
           const comboKey = 'shift+' + key;
           waitingForCombo = false;
           if (comboTimeout) clearTimeout(comboTimeout);
           highlightShiftKeys(false);
-          processKey(comboKey);
+          
+          if (currentMode === 'sword') {
+            handleComboKey(comboKey);
+          } else {
+            processKey(comboKey);
+          }
           return;
         }
       }
@@ -1388,7 +1992,6 @@
       let key = null;
       
       if (event.button === 3) key = 'mouse4';
-      else if (event.button === 4) key = 'mouse5';
       
       if (!key) return;
       
@@ -1399,7 +2002,11 @@
         event.stopImmediatePropagation();
       }
       
-      processKey(key);
+      if (currentMode === 'sword') {
+        handleDodge('left');
+      } else {
+        processKey(key);
+      }
       return false;
     }
 
@@ -1529,7 +2136,8 @@
         random: '随机按键模式',
         sequence: '序列按键模式',
         reaction: '反应训练模式',
-        balloon: '气球大战'
+        balloon: '气球大战',
+        sword: '剑雨模式'
       };
       document.getElementById('training-title').textContent = modeNames[mode];
       
@@ -1539,22 +2147,31 @@
         document.getElementById('target-key').style.display = 'flex';
         document.getElementById('sequence-display').style.display = 'none';
         document.getElementById('balloon-arena').style.display = 'none';
+        document.getElementById('sword-arena').style.display = 'none';
       } else if (mode === 'sequence') {
         currentSequence = generateSequence(2);
         sequenceIndex = 0;
         document.getElementById('target-key').style.display = 'none';
         document.getElementById('sequence-display').style.display = 'flex';
         document.getElementById('balloon-arena').style.display = 'none';
+        document.getElementById('sword-arena').style.display = 'none';
       } else if (mode === 'reaction') {
         currentTarget = getRandomKey();
         reactionStartTime = Date.now();
         document.getElementById('target-key').style.display = 'flex';
         document.getElementById('sequence-display').style.display = 'none';
         document.getElementById('balloon-arena').style.display = 'none';
+        document.getElementById('sword-arena').style.display = 'none';
       } else if (mode === 'balloon') {
         document.getElementById('target-key').style.display = 'none';
         document.getElementById('sequence-display').style.display = 'none';
         document.getElementById('balloon-arena').style.display = 'block';
+        document.getElementById('sword-arena').style.display = 'none';
+      } else if (mode === 'sword') {
+        document.getElementById('target-key').style.display = 'none';
+        document.getElementById('sequence-display').style.display = 'none';
+        document.getElementById('balloon-arena').style.display = 'none';
+        document.getElementById('sword-arena').style.display = 'block';
       }
       
       updateTargetKeyDisplay();
@@ -1563,6 +2180,7 @@
       startTimer();
       
       if (mode === 'balloon') startBalloonMode();
+      else if (mode === 'sword') startSwordMode();
       
       showPage(PAGES.TRAINING);
     }
@@ -1570,6 +2188,7 @@
     function endTraining() {
       clearInterval(timerInterval);
       stopBalloonMode();
+      stopSwordMode();
       
       waitingForCombo = false;
       if (comboTimeout) {
@@ -1670,6 +2289,7 @@
       document.getElementById('back-btn').addEventListener('click', () => {
         clearInterval(timerInterval);
         stopBalloonMode();
+        stopSwordMode();
         waitingForCombo = false;
         if (comboTimeout) clearTimeout(comboTimeout);
         highlightShiftKeys(false);
